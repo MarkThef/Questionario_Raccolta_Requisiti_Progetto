@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionario Raccolta Requisiti - Sviluppo Software</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #f5576c 75%, #4facfe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: 
+                0 32px 64px rgba(0,0,0,0.12),
+                0 0 0 1px rgba(255,255,255,0.2);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header {
+            background: linear-gradient(135deg, rgba(26,26,26,0.9) 0%, rgba(30,30,30,0.95) 100%);
+            color: white;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(102,126,234,0.1) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .header h1 {
+            font-size: 3.2em;
+            margin-bottom: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.3em;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-container {
+            padding: 60px 50px;
+        }
+
+        .section {
+            margin-bottom: 48px;
+            padding: 36px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.8) 0%, rgba(248,250,252,0.9) 100%);
+            border-radius: 20px;
+            border: 1px solid rgba(226,232,240,0.5);
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.04),
+                0 0 0 1px rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            border-radius: 20px 20px 0 0;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.08),
+                0 0 0 1px rgba(255,255,255,0.1);
+        }
+
+        .section h2 {
+            color: #1e293b;
+            font-size: 1.8em;
+            margin-bottom: 28px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+
+        .section h2::before {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            font-size: 1.4em;
+            color: white;
+            box-shadow: 0 8px 16px rgba(102,126,234,0.3);
+        }
+
+        .section:nth-child(1) h2::before { content: "👤"; }
+        .section:nth-child(2) h2::before { content: "🎯"; }
+        .section:nth-child(3) h2::before { content: "📊"; }
+        .section:nth-child(4) h2::before { content: "💾"; }
+        .section:nth-child(5) h2::before { content: "⚙️"; }
+        .section:nth-child(6) h2::before { content: "🖥️"; }
+        .section:nth-child(7) h2::before { content: "💻"; }
+        .section:nth-child(8) h2::before { content: "⏱️"; }
+        .section:nth-child(9) h2::before { content: "❓"; }
+        .section:nth-child(10) h2::before { content: "📝"; }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #334155;
+            font-size: 1.05em;
+            letter-spacing: -0.01em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(226,232,240,0.8);
+            border-radius: 12px;
+            font-size: 16px;
+            font-family: inherit;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 
+                0 0 0 4px rgba(102,126,234,0.1),
+                0 8px 16px rgba(0,0,0,0.04);
+            transform: translateY(-1px);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+            line-height: 1.6;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.7);
+            border: 2px solid rgba(226,232,240,0.5);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255,255,255,0.9);
+            border-color: #667eea;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102,126,234,0.15);
+        }
+
+        .checkbox-item input[type="checkbox"],
+        .checkbox-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 400;
+            flex: 1;
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%;
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 60px;
+            cursor: pointer;
+            display: block;
+            margin: 60px auto 0;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 15px 35px rgba(102,126,234,0.4),
+                0 5px 15px rgba(0,0,0,0.1);
+            font-family: inherit;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            animation: buttonGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes buttonGlow {
+            from {
+                box-shadow: 
+                    0 15px 35px rgba(102,126,234,0.4),
+                    0 5px 15px rgba(0,0,0,0.1);
+            }
+            to {
+                box-shadow: 
+                    0 20px 45px rgba(102,126,234,0.6),
+                    0 8px 25px rgba(0,0,0,0.15);
+            }
+        }
+
+        .save-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            background-position: 100% 100%;
+            box-shadow: 
+                0 25px 50px rgba(102,126,234,0.6),
+                0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .save-button:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        .required {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(147,51,234,0.1) 100%);
+            border: 2px solid rgba(59,130,246,0.2);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            color: #1e40af;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.1);
+        }
+
+        .info-box strong {
+            font-weight: 600;
+            color: #1d4ed8;
+        }
+
+        /* Floating animations */
+        .section:nth-child(odd) {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .section:nth-child(even) {
+            animation: float 6s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-2px); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 16px;
+            }
+            
+            .header {
+                padding: 40px 20px;
+            }
+            
+            .header h1 {
+                font-size: 2.4em;
+            }
+            
+            .form-container {
+                padding: 30px 20px;
+            }
+            
+            .section {
+                padding: 24px 16px;
+                margin-bottom: 32px;
+            }
+
+            .section h2 {
+                font-size: 1.5em;
+            }
+
+            .save-button {
+                padding: 16px 32px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .header p {
+                font-size: 1.1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Questionario Raccolta Requisiti</h1>
+            <p>Sviluppo Software Desktop e Automazioni Python</p>
+        </div>
+
+        <div class="form-container">
+            <div class="info-box">
+                <strong>Istruzioni:</strong> Compila tutti i campi con le informazioni richieste. Alla fine clicca su "Salva Questionario" per scaricare il file compilato da inviarmi via email.
+            </div>
+
+            <form id="requirementsForm">
+                <!-- Informazioni Base -->
+                <div class="section">
+                    <h2>Informazioni Base</h2>
+                    <div class="form-group">
+                        <label for="cliente">Cliente <span class="required">*</span></label>
+                        <input type="text" id="cliente" name="cliente" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="progetto">Nome Progetto</label>
+                        <input type="text" id="progetto" name="progetto">
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data</label>
+                        <input type="date" id="data" name="data">
+                    </div>
+                </div>
+
+                <!-- Il Tuo Progetto -->
+                <div class="section">
+                    <h2>Il Tuo Progetto</h2>
+                    <div class="form-group">
+                        <label for="descrizione">Cosa vuoi che faccia il software? (descrivi in poche righe)</label>
+                        <textarea id="descrizione" name="descrizione" rows="6"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Che tipo di progetto ti serve?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="automazione" name="tipoProgetto" value="Automazione di attività ripetitive">
+                                <label for="automazione">Automazione di attività ripetitive</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="software_desktop" name="tipoProgetto" value="Software desktop per gestire dati">
+                                <label for="software_desktop">Software desktop per gestire dati</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="elaborazione_file" name="tipoProgetto" value="Elaborazione automatica di file">
+                                <label for="elaborazione_file">Elaborazione automatica di file (Excel, CSV, PDF...)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="integrazione" name="tipoProgetto" value="Integrazione tra diversi sistemi/software">
+                                <label for="integrazione">Integrazione tra diversi sistemi/software</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dashboard" name="tipoProgetto" value="Dashboard per visualizzare dati">
+                                <label for="dashboard">Dashboard per visualizzare dati</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="altro_progetto" name="tipoProgetto" value="altro">
+                                <label for="altro_progetto">Altro:</label>
+                                <input type="text" id="altro_progetto_text" name="altroProgetto" style="margin-left: 10px; width: 200px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Situazione Attuale -->
+                <div class="section">
+                    <h2>La Situazione Attuale</h2>
+                    <div class="form-group">
+                        <label for="processo_attuale">Come gestisci attualmente questo processo?</label>
+                        <textarea id="processo_attuale" name="processoAttuale" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="tempo_impiegato">Quanto tempo ci impieghi ogni volta?</label>
+                        <textarea id="tempo_impiegato" name="tempoImpiegato" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="frequenza">Quante volte al giorno/settimana/mese lo fai?</label>
+                        <textarea id="frequenza" name="frequenza" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemi">Qual è la parte più noiosa/problematica?</label>
+                        <textarea id="problemi" name="problemi" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- I Dati -->
+                <div class="section">
+                    <h2>I Dati</h2>
+                    <div class="form-group">
+                        <label>Con che tipo di dati lavori?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="excel_csv" name="tipoDati" value="File Excel/CSV">
+                                <label for="excel_csv">File Excel/CSV</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="database" name="tipoDati" value="Database">
+                                <label for="database">Database</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pdf" name="tipoDati" value="File PDF">
+                                <label for="pdf">File PDF</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="email" name="tipoDati" value="Email e allegati">
+                                <label for="email">Email e allegati</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="web_api" name="tipoDati" value="Siti web/API">
+                                <label for="web_api">Siti web/API</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="altri_file" name="tipoDati" value="altro">
+                                <label for="altri_file">Altri file:</label>
+                                <input type="text" id="altri_file_text" name="altriFile" style="margin-left: 10px; width: 200px;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="origine_dati">Da dove arrivano questi dati?</label>
+                        <textarea id="origine_dati" name="origineDati" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="elaborazione_dati">Cosa devi farci? (calcoli, grafici, report, invio email...)</label>
+                        <textarea id="elaborazione_dati" name="elaborazioneDati" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Come Deve Funzionare -->
+                <div class="section">
+                    <h2>Come Deve Funzionare</h2>
+                    <div class="form-group">
+                        <label>Descrivimi il flusso ideale step-by-step:</label>
+                        <div style="margin-top: 10px;">
+                            <input type="text" name="step1" placeholder="1. Primo step..." style="margin-bottom: 10px;">
+                            <input type="text" name="step2" placeholder="2. Secondo step..." style="margin-bottom: 10px;">
+                            <input type="text" name="step3" placeholder="3. Terzo step..." style="margin-bottom: 10px;">
+                            <input type="text" name="step4" placeholder="4. Quarto step..." style="margin-bottom: 10px;">
+                            <input type="text" name="step5" placeholder="5. Quinto step..." style="margin-bottom: 10px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Deve funzionare automaticamente o con la tua supervisione?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" id="automatico" name="modalitaFunzionamento" value="Completamente automatico">
+                                <label for="automatico">Completamente automatico</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="semi_automatico" name="modalitaFunzionamento" value="Semi-automatico">
+                                <label for="semi_automatico">Semi-automatico (avvii tu, fa tutto da solo)</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="interattivo" name="modalitaFunzionamento" value="Interattivo">
+                                <label for="interattivo">Interattivo (ti chiede conferme/input)</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Quando deve essere eseguito?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="manuale" name="esecuzione" value="Quando lo avvio manualmente">
+                                <label for="manuale">Quando lo avvio manualmente</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="programmato" name="esecuzione" value="A orari programmati">
+                                <label for="programmato">A orari programmati</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="trigger" name="esecuzione" value="Quando arriva un file/email">
+                                <label for="trigger">Quando arriva un file/email</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="altro_esecuzione" name="esecuzione" value="altro">
+                                <label for="altro_esecuzione">Altro:</label>
+                                <input type="text" id="altro_esecuzione_text" name="altroEsecuzione" style="margin-left: 10px; width: 200px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- L'Interfaccia -->
+                <div class="section">
+                    <h2>L'Interfaccia</h2>
+                    <div class="form-group">
+                        <label>Chi userà il software?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" id="solo_tu" name="utenti" value="Solo tu">
+                                <label for="solo_tu">Solo tu</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="tu_colleghi" name="utenti" value="Tu + altri colleghi">
+                                <label for="tu_colleghi">Tu + altri colleghi</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="persone_non_tecniche" name="utenti" value="Persone non tecniche">
+                                <label for="persone_non_tecniche">Persone non tecniche</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Come preferiresti l'interfaccia?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" id="semplice" name="interfaccia" value="Semplice, con pochi pulsanti">
+                                <label for="semplice">Semplice, con pochi pulsanti</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="ricca" name="interfaccia" value="Ricca di opzioni e controlli">
+                                <label for="ricca">Ricca di opzioni e controlli</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="dialoghi" name="interfaccia" value="Solo finestre di dialogo quando serve">
+                                <label for="dialoghi">Solo finestre di dialogo quando serve</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="automatica_ui" name="interfaccia" value="Principalmente automatica, senza interfaccia">
+                                <label for="automatica_ui">Principalmente automatica, senza interfaccia</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="grafici">Ti servono grafici o visualizzazioni?</label>
+                        <textarea id="grafici" name="grafici" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Ambiente Tecnico -->
+                <div class="section">
+                    <h2>Ambiente Tecnico</h2>
+                    <div class="form-group">
+                        <label>Sistema operativo:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" id="windows" name="sistemaOperativo" value="Windows">
+                                <label for="windows">Windows</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="mac" name="sistemaOperativo" value="Mac">
+                                <label for="mac">Mac</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="linux" name="sistemaOperativo" value="Linux">
+                                <label for="linux">Linux</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="integrazione_software">Software/sistemi che usi e con cui deve integrarsi:</label>
+                        <textarea id="integrazione_software" name="integrazioneSoftware" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Hai già Python installato?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" id="python_si" name="python" value="Sì">
+                                <label for="python_si">Sì</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="python_no" name="python" value="No">
+                                <label for="python_no">No</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="python_non_so" name="python" value="Non so">
+                                <label for="python_non_so">Non so</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Priorità e Tempistiche -->
+                <div class="section">
+                    <h2>Priorità e Tempistiche</h2>
+                    <div class="form-group">
+                        <label for="funzionalita_importante">Qual è la funzionalità più importante?</label>
+                        <textarea id="funzionalita_importante" name="funzionalitaImportante" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="tempi">Entro quando ti servirebbe?</label>
+                        <textarea id="tempi" name="tempi" rows="2"></textarea>
+                    </div>
+                </div>
+
+                <!-- Domande Finali -->
+                <div class="section">
+                    <h2>Domande Finali</h2>
+                    <div class="form-group">
+                        <label>Il software deve essere facilmente modificabile in futuro?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="radio" id="modificabile_si" name="modificabile" value="Sì, prevedo spesso cambiamenti">
+                                <label for="modificabile_si">Sì, prevedo spesso cambiamenti</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="modificabile_stabile" name="modificabile" value="Preferisco qualcosa di stabile">
+                                <label for="modificabile_stabile">Preferisco qualcosa di stabile</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="radio" id="modificabile_non_so" name="modificabile" value="Non so">
+                                <label for="modificabile_non_so">Non so</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Ti serve supporto dopo la consegna?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="supporto_bug" name="supporto" value="Solo per eventuali bug">
+                                <label for="supporto_bug">Solo per eventuali bug</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="supporto_modifiche" name="supporto" value="Anche per piccole modifiche">
+                                <label for="supporto_modifiche">Anche per piccole modifiche</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="supporto_no" name="supporto" value="Non serve">
+                                <label for="supporto_no">Non serve</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="altre_informazioni">Altre informazioni o richieste particolari:</label>
+                        <textarea id="altre_informazioni" name="altreInformazioni" rows="6"></textarea>
+                    </div>
+                </div>
+
+                <!-- Riepilogo -->
+                <div class="section">
+                    <h2>Riepilogo Veloce</h2>
+                    <div class="form-group">
+                        <label for="obiettivo">In una frase, cosa vuoi ottenere:</label>
+                        <textarea id="obiettivo" name="obiettivo" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="vantaggio">Il principale vantaggio che ti aspetti:</label>
+                        <textarea id="vantaggio" name="vantaggio" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <button type="button" class="save-button" onclick="saveQuestionnaire()">
+                    💾 Salva Questionario
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Imposta la data di oggi automaticamente
+        document.getElementById('data').value = new Date().toISOString().split('T')[0];
+
+        function saveQuestionnaire() {
+            const form = document.getElementById('requirementsForm');
+            const formData = new FormData(form);
+            
+            // Verifica che il nome cliente sia inserito
+            const cliente = formData.get('cliente');
+            if (!cliente || cliente.trim() === '') {
+                alert('Per favore inserisci il nome del cliente prima di salvare.');
+                return;
+            }
+
+            // Raccogli tutti i dati del form
+            const data = {};
+            
+            // Campi singoli
+            for (let [key, value] of formData.entries()) {
+                if (data[key]) {
+                    // Se esiste già, trasforma in array
+                    if (Array.isArray(data[key])) {
+                        data[key].push(value);
+                    } else {
+                        data[key] = [data[key], value];
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            // Raccogli i checkboxes multipli
+            const checkboxGroups = ['tipoProgetto', 'tipoDati', 'esecuzione', 'supporto'];
+            checkboxGroups.forEach(group => {
+                const checkboxes = document.querySelectorAll(`input[name="${group}"]:checked`);
+                const values = [];
+                checkboxes.forEach(cb => {
+                    if (cb.value === 'altro') {
+                        const textInput = document.getElementById(`${cb.id}_text`);
+                        if (textInput && textInput.value.trim()) {
+                            values.push(`Altro: ${textInput.value.trim()}`);
+                        }
+                    } else {
+                        values.push(cb.value);
+                    }
+                });
+                data[group] = values;
+            });
+
+            // Raccogli gli step
+            const steps = [];
+            for (let i = 1; i <= 5; i++) {
+                const step = formData.get(`step${i}`);
+                if (step && step.trim()) {
+                    steps.push(`${i}. ${step.trim()}`);
+                }
+            }
+            data.steps = steps;
+
+            // Crea il contenuto del file
+            const content = formatQuestionnaireContent(data);
+            
+            // Crea il nome del file
+            const today = new Date();
+            const dateStr = today.toISOString().split('T')[0];
+            const clienteClean = cliente.replace(/[^a-zA-Z0-9]/g, '_');
+            const filename = `Questionario_${clienteClean}_${dateStr}.txt`;
+            
+            // Scarica il file
+            downloadFile(filename, content);
+        }
+
+        function formatQuestionnaireContent(data) {
+            const today = new Date().toLocaleDateString('it-IT');
+            
+            return `QUESTIONARIO RACCOLTA REQUISITI
+Sviluppo Software Desktop e Automazioni Python
+
+========================================
+
+INFORMAZIONI BASE
+Cliente: ${data.cliente || ''}
+Progetto: ${data.progetto || ''}
+Data: ${data.data || today}
+
+========================================
+
+1. IL TUO PROGETTO
+
+Cosa vuoi che faccia il software?
+${data.descrizione || ''}
+
+Che tipo di progetto ti serve?
+${Array.isArray(data.tipoProgetto) ? data.tipoProgetto.join(', ') : (data.tipoProgetto || '')}
+
+========================================
+
+2. LA SITUAZIONE ATTUALE
+
+Come gestisci attualmente questo processo?
+${data.processoAttuale || ''}
+
+Quanto tempo ci impieghi ogni volta?
+${data.tempoImpiegato || ''}
+
+Quante volte al giorno/settimana/mese lo fai?
+${data.frequenza || ''}
+
+Qual è la parte più noiosa/problematica?
+${data.problemi || ''}
+
+========================================
+
+3. I DATI
+
+Con che tipo di dati lavori?
+${Array.isArray(data.tipoDati) ? data.tipoDati.join(', ') : (data.tipoDati || '')}
+
+Da dove arrivano questi dati?
+${data.origineDati || ''}
+
+Cosa devi farci?
+${data.elaborazioneDati || ''}
+
+========================================
+
+4. COME DEVE FUNZIONARE
+
+Flusso ideale step-by-step:
+${Array.isArray(data.steps) ? data.steps.join('\n') : ''}
+
+Deve funzionare automaticamente o con supervisione?
+${data.modalitaFunzionamento || ''}
+
+Quando deve essere eseguito?
+${Array.isArray(data.esecuzione) ? data.esecuzione.join(', ') : (data.esecuzione || '')}
+
+========================================
+
+5. L'INTERFACCIA
+
+Chi userà il software?
+${data.utenti || ''}
+
+Come preferiresti l'interfaccia?
+${data.interfaccia || ''}
+
+Ti servono grafici o visualizzazioni?
+${data.grafici || ''}
+
+========================================
+
+6. AMBIENTE TECNICO
+
+Sistema operativo:
+${data.sistemaOperativo || ''}
+
+Software/sistemi per integrazione:
+${data.integrazioneSoftware || ''}
+
+Hai già Python installato?
+${data.python || ''}
+
+========================================
+
+7. PRIORITÀ E TEMPISTICHE
+
+Qual è la funzionalità più importante?
+${data.funzionalitaImportante || ''}
+
+Entro quando ti servirebbe?
+${data.tempi || ''}
+
+========================================
+
+8. DOMANDE FINALI
+
+Il software deve essere facilmente modificabile in futuro?
+${data.modificabile || ''}
+
+Ti serve supporto dopo la consegna?
+${Array.isArray(data.supporto) ? data.supporto.join(', ') : (data.supporto || '')}
+
+Altre informazioni o richieste particolari:
+${data.altreInformazioni || ''}
+
+========================================
+
+RIEPILOGO VELOCE
+
+In una frase, cosa vuoi ottenere:
+${data.obiettivo || ''}
+
+Il principale vantaggio che ti aspetti:
+${data.vantaggio || ''}
+
+========================================
+
+Questionario compilato il: ${today}
+`;
+        }
+
+        function downloadFile(filename, content) {
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+            
+            alert('Questionario salvato! Per favore invia il file scaricato via email.');
+        }
+    </script>
+</body>
+</html>
