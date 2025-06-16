@@ -726,6 +726,7 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         // Imposta la data di oggi automaticamente
         document.getElementById('data').value = new Date().toISOString().split('T')[0];
@@ -786,159 +787,162 @@
             }
             data.steps = steps;
 
-            // Crea il contenuto del file
-            const content = formatQuestionnaireContent(data);
-            
             // Crea il nome del file
             const today = new Date();
             const dateStr = today.toISOString().split('T')[0];
             const clienteClean = cliente.replace(/[^a-zA-Z0-9]/g, '_');
-            const filename = `Questionario_${clienteClean}_${dateStr}.txt`;
+            const filename = `Questionario_${clienteClean}_${dateStr}.pdf`;
             
-            // Scarica il file
-            downloadFile(filename, content);
+            // Genera e scarica il PDF
+            generatePDF(data, filename);
         }
 
-        function formatQuestionnaireContent(data) {
+        function generatePDF(data, filename) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
             const today = new Date().toLocaleDateString('it-IT');
+            let y = 20; // Posizione verticale iniziale
+            const lineHeight = 7;
+            const marginLeft = 20;
+            const pageWidth = doc.internal.pageSize.width;
+            const maxWidth = pageWidth - 40;
+
+            // Funzione per aggiungere testo con wrap automatico
+            function addText(text, fontSize = 10, isBold = false) {
+                if (isBold) {
+                    doc.setFont('helvetica', 'bold');
+                } else {
+                    doc.setFont('helvetica', 'normal');
+                }
+                doc.setFontSize(fontSize);
+                
+                const lines = doc.splitTextToSize(text, maxWidth);
+                lines.forEach(line => {
+                    if (y > 270) { // Nuova pagina se necessario
+                        doc.addPage();
+                        y = 20;
+                    }
+                    doc.text(line, marginLeft, y);
+                    y += lineHeight;
+                });
+                return y;
+            }
+
+            function addSection(title, content) {
+                y += 5; // Spazio extra prima della sezione
+                addText(title, 12, true);
+                y += 2;
+                addText(content || 'Non specificato', 10, false);
+                y += 3;
+            }
+
+            // Header del PDF
+            doc.setFillColor(102, 126, 234);
+            doc.rect(0, 0, pageWidth, 40, 'F');
+            doc.setTextColor(255, 255, 255);
+            addText('QUESTIONARIO RACCOLTA REQUISITI', 16, true);
+            addText('Sviluppo Software Desktop e Automazioni Python', 12, false);
             
-            return `QUESTIONARIO RACCOLTA REQUISITI
-Sviluppo Software Desktop e Automazioni Python
+            doc.setTextColor(0, 0, 0); // Ritorna al nero
+            y = 50;
 
-========================================
+            // Linea separatrice
+            doc.setDrawColor(102, 126, 234);
+            doc.setLineWidth(0.5);
+            doc.line(marginLeft, y, pageWidth - marginLeft, y);
+            y += 10;
 
-INFORMAZIONI BASE
-Cliente: ${data.cliente || ''}
-Progetto: ${data.progetto || ''}
-Data: ${data.data || today}
+            // Contenuto del questionario
+            addSection('INFORMAZIONI BASE', '');
+            addText(`Cliente: ${data.cliente || ''}`, 10, false);
+            addText(`Progetto: ${data.progetto || ''}`, 10, false);
+            addText(`Data: ${data.data || today}`, 10, false);
 
-========================================
+            addSection('1. IL TUO PROGETTO', '');
+            addText('Cosa vuoi che faccia il software:', 10, true);
+            addText(data.descrizione || '', 10, false);
+            addText('Tipo di progetto:', 10, true);
+            addText(Array.isArray(data.tipoProgetto) ? data.tipoProgetto.join(', ') : (data.tipoProgetto || ''), 10, false);
 
-1. IL TUO PROGETTO
+            addSection('2. LA SITUAZIONE ATTUALE', '');
+            addText('Come gestisci attualmente questo processo:', 10, true);
+            addText(data.processoAttuale || '', 10, false);
+            addText('Tempo impiegato:', 10, true);
+            addText(data.tempoImpiegato || '', 10, false);
+            addText('Frequenza:', 10, true);
+            addText(data.frequenza || '', 10, false);
+            addText('Parte più problematica:', 10, true);
+            addText(data.problemi || '', 10, false);
 
-Cosa vuoi che faccia il software?
-${data.descrizione || ''}
+            addSection('3. I DATI', '');
+            addText('Tipo di dati:', 10, true);
+            addText(Array.isArray(data.tipoDati) ? data.tipoDati.join(', ') : (data.tipoDati || ''), 10, false);
+            addText('Origine dati:', 10, true);
+            addText(data.origineDati || '', 10, false);
+            addText('Elaborazione necessaria:', 10, true);
+            addText(data.elaborazioneDati || '', 10, false);
 
-Che tipo di progetto ti serve?
-${Array.isArray(data.tipoProgetto) ? data.tipoProgetto.join(', ') : (data.tipoProgetto || '')}
+            addSection('4. COME DEVE FUNZIONARE', '');
+            addText('Flusso ideale step-by-step:', 10, true);
+            if (Array.isArray(data.steps) && data.steps.length > 0) {
+                data.steps.forEach(step => addText(step, 10, false));
+            }
+            addText('Modalità di funzionamento:', 10, true);
+            addText(data.modalitaFunzionamento || '', 10, false);
+            addText('Quando deve essere eseguito:', 10, true);
+            addText(Array.isArray(data.esecuzione) ? data.esecuzione.join(', ') : (data.esecuzione || ''), 10, false);
 
-========================================
+            addSection('5. L\'INTERFACCIA', '');
+            addText('Utenti:', 10, true);
+            addText(data.utenti || '', 10, false);
+            addText('Tipo di interfaccia:', 10, true);
+            addText(data.interfaccia || '', 10, false);
+            addText('Grafici/visualizzazioni:', 10, true);
+            addText(data.grafici || '', 10, false);
 
-2. LA SITUAZIONE ATTUALE
+            addSection('6. AMBIENTE TECNICO', '');
+            addText('Sistema operativo:', 10, true);
+            addText(data.sistemaOperativo || '', 10, false);
+            addText('Software per integrazione:', 10, true);
+            addText(data.integrazioneSoftware || '', 10, false);
+            addText('Python installato:', 10, true);
+            addText(data.python || '', 10, false);
 
-Come gestisci attualmente questo processo?
-${data.processoAttuale || ''}
+            addSection('7. PRIORITÀ E TEMPISTICHE', '');
+            addText('Funzionalità più importante:', 10, true);
+            addText(data.funzionalitaImportante || '', 10, false);
+            addText('Tempistiche:', 10, true);
+            addText(data.tempi || '', 10, false);
 
-Quanto tempo ci impieghi ogni volta?
-${data.tempoImpiegato || ''}
+            addSection('8. DOMANDE FINALI', '');
+            addText('Software modificabile:', 10, true);
+            addText(data.modificabile || '', 10, false);
+            addText('Supporto post-consegna:', 10, true);
+            addText(Array.isArray(data.supporto) ? data.supporto.join(', ') : (data.supporto || ''), 10, false);
+            addText('Altre informazioni:', 10, true);
+            addText(data.altreInformazioni || '', 10, false);
 
-Quante volte al giorno/settimana/mese lo fai?
-${data.frequenza || ''}
+            addSection('RIEPILOGO VELOCE', '');
+            addText('Obiettivo:', 10, true);
+            addText(data.obiettivo || '', 10, false);
+            addText('Vantaggio atteso:', 10, true);
+            addText(data.vantaggio || '', 10, false);
 
-Qual è la parte più noiosa/problematica?
-${data.problemi || ''}
+            // Footer
+            if (y > 250) {
+                doc.addPage();
+                y = 20;
+            }
+            y += 10;
+            doc.setDrawColor(102, 126, 234);
+            doc.line(marginLeft, y, pageWidth - marginLeft, y);
+            y += 10;
+            addText(`Questionario compilato il: ${today}`, 10, true);
 
-========================================
-
-3. I DATI
-
-Con che tipo di dati lavori?
-${Array.isArray(data.tipoDati) ? data.tipoDati.join(', ') : (data.tipoDati || '')}
-
-Da dove arrivano questi dati?
-${data.origineDati || ''}
-
-Cosa devi farci?
-${data.elaborazioneDati || ''}
-
-========================================
-
-4. COME DEVE FUNZIONARE
-
-Flusso ideale step-by-step:
-${Array.isArray(data.steps) ? data.steps.join('\n') : ''}
-
-Deve funzionare automaticamente o con supervisione?
-${data.modalitaFunzionamento || ''}
-
-Quando deve essere eseguito?
-${Array.isArray(data.esecuzione) ? data.esecuzione.join(', ') : (data.esecuzione || '')}
-
-========================================
-
-5. L'INTERFACCIA
-
-Chi userà il software?
-${data.utenti || ''}
-
-Come preferiresti l'interfaccia?
-${data.interfaccia || ''}
-
-Ti servono grafici o visualizzazioni?
-${data.grafici || ''}
-
-========================================
-
-6. AMBIENTE TECNICO
-
-Sistema operativo:
-${data.sistemaOperativo || ''}
-
-Software/sistemi per integrazione:
-${data.integrazioneSoftware || ''}
-
-Hai già Python installato?
-${data.python || ''}
-
-========================================
-
-7. PRIORITÀ E TEMPISTICHE
-
-Qual è la funzionalità più importante?
-${data.funzionalitaImportante || ''}
-
-Entro quando ti servirebbe?
-${data.tempi || ''}
-
-========================================
-
-8. DOMANDE FINALI
-
-Il software deve essere facilmente modificabile in futuro?
-${data.modificabile || ''}
-
-Ti serve supporto dopo la consegna?
-${Array.isArray(data.supporto) ? data.supporto.join(', ') : (data.supporto || '')}
-
-Altre informazioni o richieste particolari:
-${data.altreInformazioni || ''}
-
-========================================
-
-RIEPILOGO VELOCE
-
-In una frase, cosa vuoi ottenere:
-${data.obiettivo || ''}
-
-Il principale vantaggio che ti aspetti:
-${data.vantaggio || ''}
-
-========================================
-
-Questionario compilato il: ${today}
-`;
-        }
-
-        function downloadFile(filename, content) {
-            const element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-            element.setAttribute('download', filename);
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-            
-            alert('Questionario salvato! Per favore invia il file scaricato via email.');
+            // Salva il PDF
+            doc.save(filename);
+            alert('Questionario PDF salvato! Per favore invia il file scaricato via email.');
         }
     </script>
 </body>
