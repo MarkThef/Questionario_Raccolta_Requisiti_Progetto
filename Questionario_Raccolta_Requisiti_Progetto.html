@@ -26,11 +26,6 @@
             padding: 20px;
         }
 
-        @keyframes gradientShift {
-            0% { opacity: 1; }
-            100% { opacity: 1; }
-        }
-
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -49,15 +44,6 @@
             padding: 50px 40px;
             text-align: center;
             position: relative;
-        }
-
-        .header::before {
-            display: none;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 1; }
         }
 
         .header h1 {
@@ -89,6 +75,7 @@
             border: 1px solid #e2e8f0;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transition: all 0.2s ease;
+            position: relative;
         }
 
         .section::before {
@@ -103,7 +90,6 @@
         }
 
         .section:hover {
-            transform: none;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
@@ -176,7 +162,6 @@
             border-color: #3b82f6;
             background: #ffffff;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-            transform: none;
         }
 
         .form-group textarea {
@@ -207,7 +192,6 @@
         .checkbox-item:hover {
             background: #f1f5f9;
             border-color: #3b82f6;
-            transform: none;
             box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
@@ -243,11 +227,6 @@
             letter-spacing: 0.025em;
         }
 
-        @keyframes buttonGlow {
-            from { opacity: 1; }
-            to { opacity: 1; }
-        }
-
         .save-button:hover {
             transform: translateY(-1px);
             background: #2563eb;
@@ -277,13 +256,6 @@
         .info-box strong {
             font-weight: 600;
             color: #1d4ed8;
-        }
-
-        /* Removed floating animations for professional look */
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(0px); }
         }
 
         @media (max-width: 768px) {
@@ -759,147 +731,160 @@
             const doc = new jsPDF();
             
             const today = new Date().toLocaleDateString('it-IT');
-            let y = 20; // Posizione verticale iniziale
-            const lineHeight = 7;
+            let y = 20;
+            const lineHeight = 8;
             const marginLeft = 20;
             const pageWidth = doc.internal.pageSize.width;
             const maxWidth = pageWidth - 40;
 
-            // Funzione per aggiungere testo con wrap automatico
-            function addText(text, fontSize = 10, isBold = false) {
-                if (isBold) {
-                    doc.setFont('helvetica', 'bold');
-                } else {
-                    doc.setFont('helvetica', 'normal');
-                }
-                doc.setFontSize(fontSize);
+            function addSectionTitle(title) {
+                y += 8;
                 
-                const lines = doc.splitTextToSize(text, maxWidth);
-                lines.forEach(line => {
-                    if (y > 270) { // Nuova pagina se necessario
-                        doc.addPage();
-                        y = 20;
-                    }
-                    doc.text(line, marginLeft, y);
-                    y += lineHeight;
-                });
-                return y;
+                // Sfondo colorato per il titolo
+                doc.setFillColor(59, 130, 246);
+                doc.rect(marginLeft - 5, y - 6, maxWidth + 10, 10, 'F');
+                
+                doc.setTextColor(255, 255, 255);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(11);
+                doc.text(title, marginLeft, y);
+                
+                doc.setTextColor(0, 0, 0);
+                y += 8;
             }
 
-            function addSection(title, content) {
-                y += 5; // Spazio extra prima della sezione
-                addText(title, 12, true);
+            function addField(label, value) {
+                if (!value || value === '' || (Array.isArray(value) && value.length === 0)) {
+                    return;
+                }
+                
                 y += 2;
-                addText(content || 'Non specificato', 10, false);
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(9);
+                doc.setTextColor(51, 65, 85);
+                doc.text(label + ':', marginLeft, y);
+                y += 5;
+                
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
+                doc.setTextColor(0, 0, 0);
+                
+                let content = '';
+                if (Array.isArray(value)) {
+                    content = value.join(' • ');
+                } else {
+                    content = value.toString();
+                }
+                
+                if (content.trim() !== '') {
+                    const lines = doc.splitTextToSize(content, maxWidth - 10);
+                    lines.forEach(line => {
+                        if (y > 270) {
+                            doc.addPage();
+                            y = 20;
+                        }
+                        doc.text('  ' + line, marginLeft, y);
+                        y += lineHeight - 1;
+                    });
+                }
                 y += 3;
             }
 
             // Header del PDF
-            doc.setFillColor(102, 126, 234);
-            doc.rect(0, 0, pageWidth, 40, 'F');
+            doc.setFillColor(30, 41, 59);
+            doc.rect(0, 0, pageWidth, 45, 'F');
             doc.setTextColor(255, 255, 255);
-            addText('QUESTIONARIO RACCOLTA REQUISITI', 16, true);
-            addText('Sviluppo Software Desktop e Automazioni Python', 12, false);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.text('QUESTIONARIO RACCOLTA REQUISITI', marginLeft, 25);
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Sviluppo Software Desktop e Automazioni Python', marginLeft, 35);
             
-            doc.setTextColor(0, 0, 0); // Ritorna al nero
-            y = 50;
-
-            // Linea separatrice
-            doc.setDrawColor(102, 126, 234);
-            doc.setLineWidth(0.5);
-            doc.line(marginLeft, y, pageWidth - marginLeft, y);
-            y += 10;
+            doc.setTextColor(0, 0, 0);
+            y = 55;
 
             // Contenuto del questionario
-            addSection('INFORMAZIONI BASE', '');
-            addText(`Cliente: ${data.cliente || ''}`, 10, false);
-            addText(`Progetto: ${data.progetto || ''}`, 10, false);
-            addText(`Data: ${data.data || today}`, 10, false);
+            addSectionTitle('INFORMAZIONI BASE');
+            addField('Cliente', data.cliente);
+            addField('Progetto', data.progetto);
+            addField('Data', data.data || today);
 
-            addSection('1. IL TUO PROGETTO', '');
-            addText('Cosa vuoi che faccia il software:', 10, true);
-            addText(data.descrizione || '', 10, false);
-            addText('Tipo di progetto:', 10, true);
-            addText(Array.isArray(data.tipoProgetto) ? data.tipoProgetto.join(', ') : (data.tipoProgetto || ''), 10, false);
+            addSectionTitle('IL TUO PROGETTO');
+            addField('Descrizione del software', data.descrizione);
+            addField('Tipo di progetto', data.tipoProgetto);
 
-            addSection('2. LA SITUAZIONE ATTUALE', '');
-            addText('Come gestisci attualmente questo processo:', 10, true);
-            addText(data.processoAttuale || '', 10, false);
-            addText('Tempo impiegato:', 10, true);
-            addText(data.tempoImpiegato || '', 10, false);
-            addText('Frequenza:', 10, true);
-            addText(data.frequenza || '', 10, false);
-            addText('Parte più problematica:', 10, true);
-            addText(data.problemi || '', 10, false);
+            addSectionTitle('LA SITUAZIONE ATTUALE');
+            addField('Come gestisci attualmente questo processo', data.processoAttuale);
+            addField('Tempo impiegato', data.tempoImpiegato);
+            addField('Frequenza', data.frequenza);
+            addField('Parte più problematica', data.problemi);
 
-            addSection('3. I DATI', '');
-            addText('Tipo di dati:', 10, true);
-            addText(Array.isArray(data.tipoDati) ? data.tipoDati.join(', ') : (data.tipoDati || ''), 10, false);
-            addText('Origine dati:', 10, true);
-            addText(data.origineDati || '', 10, false);
-            addText('Elaborazione necessaria:', 10, true);
-            addText(data.elaborazioneDati || '', 10, false);
+            addSectionTitle('I DATI');
+            addField('Tipo di dati', data.tipoDati);
+            addField('Origine dati', data.origineDati);
+            addField('Elaborazione necessaria', data.elaborazioneDati);
 
-            addSection('4. COME DEVE FUNZIONARE', '');
-            addText('Flusso ideale step-by-step:', 10, true);
+            addSectionTitle('COME DEVE FUNZIONARE');
             if (Array.isArray(data.steps) && data.steps.length > 0) {
-                data.steps.forEach(step => addText(step, 10, false));
+                addField('Flusso step-by-step', data.steps);
             }
-            addText('Modalità di funzionamento:', 10, true);
-            addText(data.modalitaFunzionamento || '', 10, false);
-            addText('Quando deve essere eseguito:', 10, true);
-            addText(Array.isArray(data.esecuzione) ? data.esecuzione.join(', ') : (data.esecuzione || ''), 10, false);
+            addField('Modalità di funzionamento', data.modalitaFunzionamento);
+            addField('Quando deve essere eseguito', data.esecuzione);
 
-            addSection('5. L\'INTERFACCIA', '');
-            addText('Utenti:', 10, true);
-            addText(data.utenti || '', 10, false);
-            addText('Tipo di interfaccia:', 10, true);
-            addText(data.interfaccia || '', 10, false);
-            addText('Grafici/visualizzazioni:', 10, true);
-            addText(data.grafici || '', 10, false);
+            addSectionTitle('L\'INTERFACCIA');
+            addField('Utenti del software', data.utenti);
+            addField('Tipo di interfaccia', data.interfaccia);
+            addField('Grafici e visualizzazioni', data.grafici);
 
-            addSection('6. AMBIENTE TECNICO', '');
-            addText('Sistema operativo:', 10, true);
-            addText(data.sistemaOperativo || '', 10, false);
-            addText('Software per integrazione:', 10, true);
-            addText(data.integrazioneSoftware || '', 10, false);
-            addText('Python installato:', 10, true);
-            addText(data.python || '', 10, false);
+            addSectionTitle('AMBIENTE TECNICO');
+            addField('Sistema operativo', data.sistemaOperativo);
+            addField('Software per integrazione', data.integrazioneSoftware);
+            addField('Python installato', data.python);
 
-            addSection('7. PRIORITÀ E TEMPISTICHE', '');
-            addText('Funzionalità più importante:', 10, true);
-            addText(data.funzionalitaImportante || '', 10, false);
-            addText('Tempistiche:', 10, true);
-            addText(data.tempi || '', 10, false);
+            addSectionTitle('PRIORITA E TEMPISTICHE');
+            addField('Funzionalità più importante', data.funzionalitaImportante);
+            addField('Tempistiche', data.tempi);
 
-            addSection('8. DOMANDE FINALI', '');
-            addText('Software modificabile:', 10, true);
-            addText(data.modificabile || '', 10, false);
-            addText('Supporto post-consegna:', 10, true);
-            addText(Array.isArray(data.supporto) ? data.supporto.join(', ') : (data.supporto || ''), 10, false);
-            addText('Altre informazioni:', 10, true);
-            addText(data.altreInformazioni || '', 10, false);
+            addSectionTitle('DOMANDE FINALI');
+            addField('Software modificabile', data.modificabile);
+            addField('Supporto post-consegna', data.supporto);
+            addField('Altre informazioni', data.altreInformazioni);
 
-            addSection('RIEPILOGO VELOCE', '');
-            addText('Obiettivo:', 10, true);
-            addText(data.obiettivo || '', 10, false);
-            addText('Vantaggio atteso:', 10, true);
-            addText(data.vantaggio || '', 10, false);
+            addSectionTitle('RIEPILOGO VELOCE');
+            addField('Obiettivo principale', data.obiettivo);
+            addField('Vantaggio atteso', data.vantaggio);
 
-            // Footer
+            // Footer professionale
             if (y > 250) {
                 doc.addPage();
                 y = 20;
             }
-            y += 10;
-            doc.setDrawColor(102, 126, 234);
+            y += 15;
+            
+            doc.setDrawColor(59, 130, 246);
+            doc.setLineWidth(1);
             doc.line(marginLeft, y, pageWidth - marginLeft, y);
             y += 10;
-            addText(`Questionario compilato il: ${today}`, 10, true);
+            
+            doc.setFillColor(248, 250, 252);
+            doc.rect(marginLeft - 5, y - 3, maxWidth + 10, 15, 'F');
+            
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.setTextColor(59, 130, 246);
+            doc.text(`Questionario compilato il: ${today}`, marginLeft, y + 5);
+            
+            y += 12;
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(9);
+            doc.setTextColor(100, 116, 139);
+            doc.text('Invia questo file compilato via email per procedere con l\'analisi dei requisiti', marginLeft, y);
 
             // Salva il PDF
             doc.save(filename);
-            alert('Questionario PDF salvato! Per favore invia il file scaricato via email.');
+            
+            alert(`✅ Questionario PDF salvato con successo!\n\nFile: ${filename}\n\n📧 Per favore invia il file scaricato via email per procedere con l'analisi dei requisiti.`);
         }
     </script>
 </body>
