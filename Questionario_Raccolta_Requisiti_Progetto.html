@@ -1077,6 +1077,7 @@
         // Imposta la data di oggi automaticamente
         document.getElementById('data').value = new Date().toISOString().split('T')[0];
 
+        // LOGICA ORIGINALE IDENTICA - Solo aggiunta navigazione step
         let currentStep = 0;
         const totalSteps = 11;
 
@@ -1109,15 +1110,6 @@
         }
 
         function nextStep() {
-            // Validate required fields for step 1
-            if (currentStep === 1) {
-                const cliente = document.getElementById('cliente').value;
-                if (!cliente || cliente.trim() === '') {
-                    alert('Per favore inserisci il nome del cliente prima di continuare.');
-                    return;
-                }
-            }
-            
             if (currentStep < totalSteps - 1) {
                 currentStep++;
                 updateStepNavigation();
@@ -1134,14 +1126,12 @@
         // Sidebar navigation
         document.querySelectorAll('.step-item').forEach((item, index) => {
             item.addEventListener('click', () => {
-                // Allow navigation to completed steps or current step
-                if (index <= currentStep) {
-                    currentStep = index;
-                    updateStepNavigation();
-                }
+                currentStep = index;
+                updateStepNavigation();
             });
         });
 
+        // LOGICA ORIGINALE IDENTICA
         function saveQuestionnaire() {
             const form = document.getElementById('requirementsForm');
             const formData = new FormData(form);
@@ -1150,8 +1140,6 @@
             const cliente = formData.get('cliente');
             if (!cliente || cliente.trim() === '') {
                 alert('Per favore inserisci il nome del cliente prima di salvare.');
-                currentStep = 1;
-                updateStepNavigation();
                 return;
             }
 
@@ -1225,7 +1213,7 @@
                 y += 8;
                 
                 // Sfondo colorato per il titolo
-                doc.setFillColor(16, 185, 129);
+                doc.setFillColor(59, 130, 246);
                 doc.rect(marginLeft - 5, y - 6, maxWidth + 10, 10, 'F');
                 
                 doc.setTextColor(255, 255, 255);
@@ -1346,7 +1334,7 @@
             }
             y += 15;
             
-            doc.setDrawColor(16, 185, 129);
+            doc.setDrawColor(59, 130, 246);
             doc.setLineWidth(1);
             doc.line(marginLeft, y, pageWidth - marginLeft, y);
             y += 10;
@@ -1356,7 +1344,7 @@
             
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(16, 185, 129);
+            doc.setTextColor(59, 130, 246);
             doc.text(`Questionario compilato il: ${today}`, marginLeft, y + 5);
             
             y += 12;
