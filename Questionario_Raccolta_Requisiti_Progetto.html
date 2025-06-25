@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questionario Raccolta Requisiti - Sviluppo Software</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
         * {
             margin: 0;
@@ -14,154 +14,266 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.7;
-            color: #1a1a1a;
-            background: #f8fafc;
-            background-image: 
-                linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 50%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            background-attachment: fixed;
             min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.1),
-                0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            color: white;
-            padding: 50px 40px;
-            text-align: center;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 2.8em;
-            margin-bottom: 16px;
-            font-weight: 600;
             color: #ffffff;
-            position: relative;
-            z-index: 1;
+            overflow-x: hidden;
         }
 
-        .header p {
-            opacity: 0.9;
-            font-size: 1.3em;
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .logo h1 {
+            font-size: 1.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            font-size: 0.9em;
+            opacity: 0.8;
             font-weight: 400;
-            position: relative;
-            z-index: 1;
         }
 
-        .form-container {
-            padding: 60px 50px;
+        .progress-container {
+            margin-bottom: 30px;
         }
 
-        .section {
-            margin-bottom: 32px;
-            padding: 32px;
-            background: #ffffff;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        .progress-bar {
             width: 100%;
-            height: 2px;
-            background: #3b82f6;
-            border-radius: 12px 12px 0 0;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 15px;
         }
 
-        .section:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            width: 9.09%;
+            transition: width 0.3s ease;
+            border-radius: 3px;
         }
 
-        .section h2 {
-            color: #1e293b;
-            font-size: 1.8em;
-            margin-bottom: 28px;
+        .progress-text {
+            text-align: center;
+            font-size: 0.9em;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .step-list {
+            list-style: none;
+        }
+
+        .step-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            font-weight: 600;
-            letter-spacing: -0.025em;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
         }
 
-        .section h2::before {
+        .step-item.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .step-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            opacity: 0.7;
+        }
+
+        .step-item:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: #3b82f6;
-            border-radius: 8px;
-            font-size: 1.1em;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-right: 12px;
+            transition: all 0.3s ease;
         }
 
-        .section:nth-child(1) h2::before { content: "👤"; }
-        .section:nth-child(2) h2::before { content: "🎯"; }
-        .section:nth-child(3) h2::before { content: "📊"; }
-        .section:nth-child(4) h2::before { content: "💾"; }
-        .section:nth-child(5) h2::before { content: "⚙️"; }
-        .section:nth-child(6) h2::before { content: "🖥️"; }
-        .section:nth-child(7) h2::before { content: "💻"; }
-        .section:nth-child(8) h2::before { content: "⏱️"; }
-        .section:nth-child(9) h2::before { content: "❓"; }
-        .section:nth-child(10) h2::before { content: "📝"; }
+        .step-item.active .step-number {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .step-item.completed .step-number {
+            background: #10b981;
+            color: #ffffff;
+        }
+
+        .step-item.completed .step-number::before {
+            content: "✓";
+        }
+
+        .step-title {
+            font-weight: 500;
+            font-size: 0.95em;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            padding: 40px;
+            position: relative;
+        }
+
+        .step-container {
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .step-container.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .step-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .step-header h2 {
+            font-size: 3em;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .step-header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        .content-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .intro-card {
+            text-align: center;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .intro-card h3 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #10b981;
+        }
+
+        .intro-card p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
 
         .form-group {
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
         .form-group label {
             display: block;
-            font-weight: 500;
-            margin-bottom: 12px;
-            color: #334155;
-            font-size: 1.05em;
-            letter-spacing: -0.01em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffffff;
+            font-size: 1.1em;
         }
 
         .form-group input[type="text"],
         .form-group input[type="date"],
         .form-group textarea {
             width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            padding: 18px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
             font-size: 16px;
             font-family: inherit;
-            background: #ffffff;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            color: #ffffff;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="text"]::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .form-group input[type="text"]:focus,
         .form-group input[type="date"]:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #3b82f6;
-            background: #ffffff;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            border-color: #10b981;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
         }
 
         .form-group textarea {
@@ -171,486 +283,791 @@
         }
 
         .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
         }
 
         .checkbox-item {
             display: flex;
             align-items: center;
-            gap: 14px;
-            padding: 14px 18px;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            gap: 18px;
+            padding: 20px 25px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            transition: all 0.3s ease;
             cursor: pointer;
+            backdrop-filter: blur(10px);
         }
 
         .checkbox-item:hover {
-            background: #f1f5f9;
-            border-color: #3b82f6;
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #10b981;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.2);
         }
 
         .checkbox-item input[type="checkbox"],
         .checkbox-item input[type="radio"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #667eea;
+            width: 24px;
+            height: 24px;
+            accent-color: #10b981;
             cursor: pointer;
         }
 
         .checkbox-item label {
             margin: 0;
             cursor: pointer;
-            font-weight: 400;
+            font-weight: 500;
+            flex: 1;
+            color: #ffffff;
+        }
+
+        .checkbox-item input[type="text"] {
+            margin-left: 15px;
+            width: 200px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+        }
+
+        .steps-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .step-input {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .step-input .step-number-input {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #10b981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1.1em;
+        }
+
+        .step-input input {
             flex: 1;
         }
 
-        .save-button {
-            background: #3b82f6;
-            color: white;
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-button {
+            padding: 15px 30px;
+            border-radius: 12px;
             border: none;
-            padding: 16px 40px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            display: block;
-            margin: 40px auto 0;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             font-family: inherit;
-            letter-spacing: 0.025em;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .save-button:hover {
-            transform: translateY(-1px);
-            background: #2563eb;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        .btn-prev {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .save-button:active {
-            transform: translateY(0);
+        .btn-prev:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-3px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            color: white;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-next:hover {
+            transform: translateX(3px);
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            color: white;
+            padding: 18px 40px;
+            font-size: 18px;
+            box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-save:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(16, 185, 129, 0.5);
         }
 
         .required {
-            color: #ef4444;
-            font-weight: 600;
+            color: #ff6b6b;
+            font-weight: 700;
         }
 
-        .info-box {
-            background: #eff6ff;
-            border: 1px solid #bfdbfe;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            color: #1e40af;
-            font-weight: 500;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .info-box strong {
-            font-weight: 600;
-            color: #1d4ed8;
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+                padding: 30px 20px;
+            }
         }
 
         @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 16px;
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             }
             
-            .header {
-                padding: 40px 20px;
+            .main-content {
+                margin-left: 0;
+                padding: 20px 15px;
             }
             
-            .header h1 {
-                font-size: 2.4em;
-            }
-            
-            .form-container {
+            .content-card {
                 padding: 30px 20px;
             }
             
-            .section {
-                padding: 24px 16px;
-                margin-bottom: 32px;
+            .step-header h2 {
+                font-size: 2.2em;
             }
-
-            .section h2 {
-                font-size: 1.5em;
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
             }
-
-            .save-button {
-                padding: 16px 32px;
-                font-size: 16px;
+            
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-button {
+                width: 100%;
+                justify-content: center;
             }
         }
 
         @media (max-width: 480px) {
-            .header h1 {
-                font-size: 2em;
+            .step-header h2 {
+                font-size: 1.8em;
             }
             
-            .header p {
-                font-size: 1.1em;
+            .checkbox-item input[type="text"] {
+                width: 150px;
+                font-size: 12px;
             }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Questionario Raccolta Requisiti</h1>
-            <p>Sviluppo Software Desktop e Automazioni Python</p>
-        </div>
-
-        <div class="form-container">
-            <div class="info-box">
-                <strong>Istruzioni:</strong> Compila tutti i campi con le informazioni richieste. Alla fine clicca su "Salva Questionario" per scaricare il file compilato da inviarmi via email.
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <h1>Questionario</h1>
+                <p>Raccolta Requisiti</p>
             </div>
 
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Step 1 di 11</div>
+            </div>
+
+            <ul class="step-list">
+                <li class="step-item active" data-step="0">
+                    <div class="step-number">1</div>
+                    <div class="step-title">Introduzione</div>
+                </li>
+                <li class="step-item" data-step="1">
+                    <div class="step-number">2</div>
+                    <div class="step-title">Informazioni Base</div>
+                </li>
+                <li class="step-item" data-step="2">
+                    <div class="step-number">3</div>
+                    <div class="step-title">Il Tuo Progetto</div>
+                </li>
+                <li class="step-item" data-step="3">
+                    <div class="step-number">4</div>
+                    <div class="step-title">Situazione Attuale</div>
+                </li>
+                <li class="step-item" data-step="4">
+                    <div class="step-number">5</div>
+                    <div class="step-title">I Dati</div>
+                </li>
+                <li class="step-item" data-step="5">
+                    <div class="step-number">6</div>
+                    <div class="step-title">Come Deve Funzionare</div>
+                </li>
+                <li class="step-item" data-step="6">
+                    <div class="step-number">7</div>
+                    <div class="step-title">L'Interfaccia</div>
+                </li>
+                <li class="step-item" data-step="7">
+                    <div class="step-number">8</div>
+                    <div class="step-title">Ambiente Tecnico</div>
+                </li>
+                <li class="step-item" data-step="8">
+                    <div class="step-number">9</div>
+                    <div class="step-title">Priorità e Tempistiche</div>
+                </li>
+                <li class="step-item" data-step="9">
+                    <div class="step-number">10</div>
+                    <div class="step-title">Domande Finali</div>
+                </li>
+                <li class="step-item" data-step="10">
+                    <div class="step-number">11</div>
+                    <div class="step-title">Riepilogo</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
             <form id="requirementsForm">
-                <!-- Informazioni Base -->
-                <div class="section">
-                    <h2>Informazioni Base</h2>
-                    <div class="form-group">
-                        <label for="cliente">Cliente <span class="required">*</span></label>
-                        <input type="text" id="cliente" name="cliente" required>
+                <!-- Step 0: Introduzione -->
+                <div class="step-container active" data-step="0">
+                    <div class="step-header">
+                        <h2>Benvenuto!</h2>
+                        <p>Iniziamo a raccogliere i requisiti per il tuo progetto software</p>
                     </div>
-                    <div class="form-group">
-                        <label for="progetto">Nome Progetto</label>
-                        <input type="text" id="progetto" name="progetto">
+                    <div class="content-card intro-card">
+                        <h3>🚀 Sviluppo Software Desktop e Automazioni Python</h3>
+                        <p>Questo questionario mi aiuterà a comprendere esattamente cosa ti serve per creare la soluzione software perfetta per te.</p>
+                        <p><strong>Istruzioni:</strong> Naviga tra le sezioni, compila tutti i campi e alla fine potrai scaricare il questionario compilato da inviarmi via email.</p>
+                        <p>Il processo richiederà circa 10-15 minuti. Prendiamoci il tempo necessario per fare le cose per bene! 💪</p>
                     </div>
-                    <div class="form-group">
-                        <label for="data">Data</label>
-                        <input type="date" id="data" name="data">
-                    </div>
-                </div>
-
-                <!-- Il Tuo Progetto -->
-                <div class="section">
-                    <h2>Il Tuo Progetto</h2>
-                    <div class="form-group">
-                        <label for="descrizione">Cosa vuoi che faccia il software? (descrivi in poche righe)</label>
-                        <textarea id="descrizione" name="descrizione" rows="6"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Che tipo di progetto ti serve?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="automazione" name="tipoProgetto" value="Automazione di attività ripetitive">
-                                <label for="automazione">Automazione di attività ripetitive</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="software_desktop" name="tipoProgetto" value="Software desktop per gestire dati">
-                                <label for="software_desktop">Software desktop per gestire dati</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="elaborazione_file" name="tipoProgetto" value="Elaborazione automatica di file">
-                                <label for="elaborazione_file">Elaborazione automatica di file (Excel, CSV, PDF...)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="integrazione" name="tipoProgetto" value="Integrazione tra diversi sistemi/software">
-                                <label for="integrazione">Integrazione tra diversi sistemi/software</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="dashboard" name="tipoProgetto" value="Dashboard per visualizzare dati">
-                                <label for="dashboard">Dashboard per visualizzare dati</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="altro_progetto" name="tipoProgetto" value="altro">
-                                <label for="altro_progetto">Altro:</label>
-                                <input type="text" id="altro_progetto_text" name="altroProgetto" style="margin-left: 10px; width: 200px;">
-                            </div>
-                        </div>
+                    <div class="navigation-buttons">
+                        <div></div>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Iniziamo! <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Situazione Attuale -->
-                <div class="section">
-                    <h2>La Situazione Attuale</h2>
-                    <div class="form-group">
-                        <label for="processo_attuale">Come gestisci attualmente questo processo?</label>
-                        <textarea id="processo_attuale" name="processoAttuale" rows="4"></textarea>
+                <!-- Step 1: Informazioni Base -->
+                <div class="step-container" data-step="1">
+                    <div class="step-header">
+                        <h2>👤 Informazioni Base</h2>
+                        <p>Iniziamo con le informazioni essenziali del progetto</p>
                     </div>
-                    <div class="form-group">
-                        <label for="tempo_impiegato">Quanto tempo ci impieghi ogni volta?</label>
-                        <textarea id="tempo_impiegato" name="tempoImpiegato" rows="2"></textarea>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label for="cliente">Cliente <span class="required">*</span></label>
+                            <input type="text" id="cliente" name="cliente" required placeholder="Nome o azienda del cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="progetto">Nome Progetto</label>
+                            <input type="text" id="progetto" name="progetto" placeholder="Come vuoi chiamare questo progetto?">
+                        </div>
+                        <div class="form-group">
+                            <label for="data">Data</label>
+                            <input type="date" id="data" name="data">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="frequenza">Quante volte al giorno/settimana/mese lo fai?</label>
-                        <textarea id="frequenza" name="frequenza" rows="2"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="problemi">Qual è la parte più noiosa/problematica?</label>
-                        <textarea id="problemi" name="problemi" rows="4"></textarea>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- I Dati -->
-                <div class="section">
-                    <h2>I Dati</h2>
-                    <div class="form-group">
-                        <label>Con che tipo di dati lavori?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="excel_csv" name="tipoDati" value="File Excel/CSV">
-                                <label for="excel_csv">File Excel/CSV</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="database" name="tipoDati" value="Database">
-                                <label for="database">Database</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="pdf" name="tipoDati" value="File PDF">
-                                <label for="pdf">File PDF</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="email" name="tipoDati" value="Email e allegati">
-                                <label for="email">Email e allegati</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="web_api" name="tipoDati" value="Siti web/API">
-                                <label for="web_api">Siti web/API</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="altri_file" name="tipoDati" value="altro">
-                                <label for="altri_file">Altri file:</label>
-                                <input type="text" id="altri_file_text" name="altriFile" style="margin-left: 10px; width: 200px;">
+                <!-- Step 2: Il Tuo Progetto -->
+                <div class="step-container" data-step="2">
+                    <div class="step-header">
+                        <h2>🎯 Il Tuo Progetto</h2>
+                        <p>Descrivi cosa vuoi ottenere e che tipo di soluzione ti serve</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label for="descrizione">Cosa vuoi che faccia il software? (descrivi in poche righe)</label>
+                            <textarea id="descrizione" name="descrizione" rows="6" placeholder="Descrivi in modo semplice cosa vorresti che facesse il software..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Che tipo di progetto ti serve?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="automazione" name="tipoProgetto" value="Automazione di attività ripetitive">
+                                    <label for="automazione">Automazione di attività ripetitive</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="software_desktop" name="tipoProgetto" value="Software desktop per gestire dati">
+                                    <label for="software_desktop">Software desktop per gestire dati</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="elaborazione_file" name="tipoProgetto" value="Elaborazione automatica di file">
+                                    <label for="elaborazione_file">Elaborazione automatica di file (Excel, CSV, PDF...)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="integrazione" name="tipoProgetto" value="Integrazione tra diversi sistemi/software">
+                                    <label for="integrazione">Integrazione tra diversi sistemi/software</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="dashboard" name="tipoProgetto" value="Dashboard per visualizzare dati">
+                                    <label for="dashboard">Dashboard per visualizzare dati</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="altro_progetto" name="tipoProgetto" value="altro">
+                                    <label for="altro_progetto">Altro:</label>
+                                    <input type="text" id="altro_progetto_text" name="altroProgetto" placeholder="Specifica...">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="origine_dati">Da dove arrivano questi dati?</label>
-                        <textarea id="origine_dati" name="origineDati" rows="4"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="elaborazione_dati">Cosa devi farci? (calcoli, grafici, report, invio email...)</label>
-                        <textarea id="elaborazione_dati" name="elaborazioneDati" rows="4"></textarea>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Come Deve Funzionare -->
-                <div class="section">
-                    <h2>Come Deve Funzionare</h2>
-                    <div class="form-group">
-                        <label>Descrivimi il flusso ideale step-by-step:</label>
-                        <div style="margin-top: 10px;">
-                            <input type="text" name="step1" placeholder="1. Primo step..." style="margin-bottom: 10px;">
-                            <input type="text" name="step2" placeholder="2. Secondo step..." style="margin-bottom: 10px;">
-                            <input type="text" name="step3" placeholder="3. Terzo step..." style="margin-bottom: 10px;">
-                            <input type="text" name="step4" placeholder="4. Quarto step..." style="margin-bottom: 10px;">
-                            <input type="text" name="step5" placeholder="5. Quinto step..." style="margin-bottom: 10px;">
+                <!-- Step 3: Situazione Attuale -->
+                <div class="step-container" data-step="3">
+                    <div class="step-header">
+                        <h2>📊 La Situazione Attuale</h2>
+                        <p>Raccontami come funziona adesso e quali sono i problemi</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label for="processo_attuale">Come gestisci attualmente questo processo?</label>
+                            <textarea id="processo_attuale" name="processoAttuale" rows="4" placeholder="Descrivi come fai attualmente le cose che vuoi automatizzare..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="tempo_impiegato">Quanto tempo ci impieghi ogni volta?</label>
+                            <textarea id="tempo_impiegato" name="tempoImpiegato" rows="2" placeholder="Es: 2 ore, 30 minuti, tutta la mattina..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="frequenza">Quante volte al giorno/settimana/mese lo fai?</label>
+                            <textarea id="frequenza" name="frequenza" rows="2" placeholder="Es: ogni giorno, 3 volte a settimana, una volta al mese..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="problemi">Qual è la parte più noiosa/problematica?</label>
+                            <textarea id="problemi" name="problemi" rows="4" placeholder="Cosa ti fa perdere più tempo o ti crea più stress?"></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Deve funzionare automaticamente o con la tua supervisione?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="radio" id="automatico" name="modalitaFunzionamento" value="Completamente automatico">
-                                <label for="automatico">Completamente automatico</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="semi_automatico" name="modalitaFunzionamento" value="Semi-automatico">
-                                <label for="semi_automatico">Semi-automatico (avvii tu, fa tutto da solo)</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="interattivo" name="modalitaFunzionamento" value="Interattivo">
-                                <label for="interattivo">Interattivo (ti chiede conferme/input)</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Quando deve essere eseguito?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="manuale" name="esecuzione" value="Quando lo avvio manualmente">
-                                <label for="manuale">Quando lo avvio manualmente</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="programmato" name="esecuzione" value="A orari programmati">
-                                <label for="programmato">A orari programmati</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="trigger" name="esecuzione" value="Quando arriva un file/email">
-                                <label for="trigger">Quando arriva un file/email</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="altro_esecuzione" name="esecuzione" value="altro">
-                                <label for="altro_esecuzione">Altro:</label>
-                                <input type="text" id="altro_esecuzione_text" name="altroEsecuzione" style="margin-left: 10px; width: 200px;">
-                            </div>
-                        </div>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- L'Interfaccia -->
-                <div class="section">
-                    <h2>L'Interfaccia</h2>
-                    <div class="form-group">
-                        <label>Chi userà il software?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="radio" id="solo_tu" name="utenti" value="Solo tu">
-                                <label for="solo_tu">Solo tu</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="tu_colleghi" name="utenti" value="Tu + altri colleghi">
-                                <label for="tu_colleghi">Tu + altri colleghi</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="persone_non_tecniche" name="utenti" value="Persone non tecniche">
-                                <label for="persone_non_tecniche">Persone non tecniche</label>
+                <!-- Step 4: I Dati -->
+                <div class="step-container" data-step="4">
+                    <div class="step-header">
+                        <h2>💾 I Dati</h2>
+                        <p>Parliamo dei dati con cui devi lavorare</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label>Con che tipo di dati lavori?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="excel_csv" name="tipoDati" value="File Excel/CSV">
+                                    <label for="excel_csv">File Excel/CSV</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="database" name="tipoDati" value="Database">
+                                    <label for="database">Database</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="pdf" name="tipoDati" value="File PDF">
+                                    <label for="pdf">File PDF</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="email" name="tipoDati" value="Email e allegati">
+                                    <label for="email">Email e allegati</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="web_api" name="tipoDati" value="Siti web/API">
+                                    <label for="web_api">Siti web/API</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="altri_file" name="tipoDati" value="altro">
+                                    <label for="altri_file">Altri file:</label>
+                                    <input type="text" id="altri_file_text" name="altriFile" placeholder="Specifica...">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Come preferiresti l'interfaccia?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="radio" id="semplice" name="interfaccia" value="Semplice, con pochi pulsanti">
-                                <label for="semplice">Semplice, con pochi pulsanti</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="ricca" name="interfaccia" value="Ricca di opzioni e controlli">
-                                <label for="ricca">Ricca di opzioni e controlli</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="dialoghi" name="interfaccia" value="Solo finestre di dialogo quando serve">
-                                <label for="dialoghi">Solo finestre di dialogo quando serve</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="automatica_ui" name="interfaccia" value="Principalmente automatica, senza interfaccia">
-                                <label for="automatica_ui">Principalmente automatica, senza interfaccia</label>
-                            </div>
+                        <div class="form-group">
+                            <label for="origine_dati">Da dove arrivano questi dati?</label>
+                            <textarea id="origine_dati" name="origineDati" rows="4" placeholder="Es: li scarico da un sito, li ricevo via email, li genero manualmente..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="elaborazione_dati">Cosa devi farci? (calcoli, grafici, report, invio email...)</label>
+                            <textarea id="elaborazione_dati" name="elaborazioneDati" rows="4" placeholder="Descrivi cosa devi fare con questi dati..."></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="grafici">Ti servono grafici o visualizzazioni?</label>
-                        <textarea id="grafici" name="grafici" rows="4"></textarea>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Ambiente Tecnico -->
-                <div class="section">
-                    <h2>Ambiente Tecnico</h2>
-                    <div class="form-group">
-                        <label>Sistema operativo:</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="radio" id="windows" name="sistemaOperativo" value="Windows">
-                                <label for="windows">Windows</label>
+                <!-- Step 5: Come Deve Funzionare -->
+                <div class="step-container" data-step="5">
+                    <div class="step-header">
+                        <h2>⚙️ Come Deve Funzionare</h2>
+                        <p>Definiamo il flusso di lavoro ideale</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label>Descrivimi il flusso ideale step-by-step:</label>
+                            <div class="steps-input-group">
+                                <div class="step-input">
+                                    <div class="step-number-input">1</div>
+                                    <input type="text" name="step1" placeholder="Primo step...">
+                                </div>
+                                <div class="step-input">
+                                    <div class="step-number-input">2</div>
+                                    <input type="text" name="step2" placeholder="Secondo step...">
+                                </div>
+                                <div class="step-input">
+                                    <div class="step-number-input">3</div>
+                                    <input type="text" name="step3" placeholder="Terzo step...">
+                                </div>
+                                <div class="step-input">
+                                    <div class="step-number-input">4</div>
+                                    <input type="text" name="step4" placeholder="Quarto step...">
+                                </div>
+                                <div class="step-input">
+                                    <div class="step-number-input">5</div>
+                                    <input type="text" name="step5" placeholder="Quinto step...">
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="mac" name="sistemaOperativo" value="Mac">
-                                <label for="mac">Mac</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Deve funzionare automaticamente o con la tua supervisione?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="automatico" name="modalitaFunzionamento" value="Completamente automatico">
+                                    <label for="automatico">Completamente automatico</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="semi_automatico" name="modalitaFunzionamento" value="Semi-automatico">
+                                    <label for="semi_automatico">Semi-automatico (avvii tu, fa tutto da solo)</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="interattivo" name="modalitaFunzionamento" value="Interattivo">
+                                    <label for="interattivo">Interattivo (ti chiede conferme/input)</label>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="linux" name="sistemaOperativo" value="Linux">
-                                <label for="linux">Linux</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Quando deve essere eseguito?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="manuale" name="esecuzione" value="Quando lo avvio manualmente">
+                                    <label for="manuale">Quando lo avvio manualmente</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="programmato" name="esecuzione" value="A orari programmati">
+                                    <label for="programmato">A orari programmati</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="trigger" name="esecuzione" value="Quando arriva un file/email">
+                                    <label for="trigger">Quando arriva un file/email</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="altro_esecuzione" name="esecuzione" value="altro">
+                                    <label for="altro_esecuzione">Altro:</label>
+                                    <input type="text" id="altro_esecuzione_text" name="altroEsecuzione" placeholder="Specifica...">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="integrazione_software">Software/sistemi che usi e con cui deve integrarsi:</label>
-                        <textarea id="integrazione_software" name="integrazioneSoftware" rows="4"></textarea>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
-                    <div class="form-group">
-                        <label>Hai già Python installato?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="radio" id="python_si" name="python" value="Sì">
-                                <label for="python_si">Sì</label>
+                </div>
+
+                <!-- Step 6: L'Interfaccia -->
+                <div class="step-container" data-step="6">
+                    <div class="step-header">
+                        <h2>🖥️ L'Interfaccia</h2>
+                        <p>Come deve apparire e funzionare l'interfaccia utente</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label>Chi userà il software?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="solo_tu" name="utenti" value="Solo tu">
+                                    <label for="solo_tu">Solo tu</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="tu_colleghi" name="utenti" value="Tu + altri colleghi">
+                                    <label for="tu_colleghi">Tu + altri colleghi</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="persone_non_tecniche" name="utenti" value="Persone non tecniche">
+                                    <label for="persone_non_tecniche">Persone non tecniche</label>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="python_no" name="python" value="No">
-                                <label for="python_no">No</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Come preferiresti l'interfaccia?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="semplice" name="interfaccia" value="Semplice, con pochi pulsanti">
+                                    <label for="semplice">Semplice, con pochi pulsanti</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="ricca" name="interfaccia" value="Ricca di opzioni e controlli">
+                                    <label for="ricca">Ricca di opzioni e controlli</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="dialoghi" name="interfaccia" value="Solo finestre di dialogo quando serve">
+                                    <label for="dialoghi">Solo finestre di dialogo quando serve</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="automatica_ui" name="interfaccia" value="Principalmente automatica, senza interfaccia">
+                                    <label for="automatica_ui">Principalmente automatica, senza interfaccia</label>
+                                </div>
                             </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="python_non_so" name="python" value="Non so">
-                                <label for="python_non_so">Non so</label>
+                        </div>
+                        <div class="form-group">
+                            <label for="grafici">Ti servono grafici o visualizzazioni?</label>
+                            <textarea id="grafici" name="grafici" rows="4" placeholder="Descrivi se hai bisogno di grafici, tabelle, dashboard..."></textarea>
+                        </div>
+                    </div>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 7: Ambiente Tecnico -->
+                <div class="step-container" data-step="7">
+                    <div class="step-header">
+                        <h2>💻 Ambiente Tecnico</h2>
+                        <p>Informazioni sul tuo setup tecnico</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label>Sistema operativo:</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="windows" name="sistemaOperativo" value="Windows">
+                                    <label for="windows">Windows</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="mac" name="sistemaOperativo" value="Mac">
+                                    <label for="mac">Mac</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="linux" name="sistemaOperativo" value="Linux">
+                                    <label for="linux">Linux</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="integrazione_software">Software/sistemi che usi e con cui deve integrarsi:</label>
+                            <textarea id="integrazione_software" name="integrazioneSoftware" rows="4" placeholder="Es: Excel, Outlook, SAP, software gestionali, siti web specifici..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Hai già Python installato?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="python_si" name="python" value="Sì">
+                                    <label for="python_si">Sì</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="python_no" name="python" value="No">
+                                    <label for="python_no">No</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="python_non_so" name="python" value="Non so">
+                                    <label for="python_non_so">Non so</label>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Priorità e Tempistiche -->
-                <div class="section">
-                    <h2>Priorità e Tempistiche</h2>
-                    <div class="form-group">
-                        <label for="funzionalita_importante">Qual è la funzionalità più importante?</label>
-                        <textarea id="funzionalita_importante" name="funzionalitaImportante" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="tempi">Entro quando ti servirebbe?</label>
-                        <textarea id="tempi" name="tempi" rows="2"></textarea>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Domande Finali -->
-                <div class="section">
-                    <h2>Domande Finali</h2>
-                    <div class="form-group">
-                        <label>Il software deve essere facilmente modificabile in futuro?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="radio" id="modificabile_si" name="modificabile" value="Sì, prevedo spesso cambiamenti">
-                                <label for="modificabile_si">Sì, prevedo spesso cambiamenti</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="modificabile_stabile" name="modificabile" value="Preferisco qualcosa di stabile">
-                                <label for="modificabile_stabile">Preferisco qualcosa di stabile</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="radio" id="modificabile_non_so" name="modificabile" value="Non so">
-                                <label for="modificabile_non_so">Non so</label>
-                            </div>
+                <!-- Step 8: Priorità e Tempistiche -->
+                <div class="step-container" data-step="8">
+                    <div class="step-header">
+                        <h2>⏱️ Priorità e Tempistiche</h2>
+                        <p>Cosa è più importante e quando ti serve</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label for="funzionalita_importante">Qual è la funzionalità più importante?</label>
+                            <textarea id="funzionalita_importante" name="funzionalitaImportante" rows="3" placeholder="Se dovessi scegliere una sola cosa che il software deve fare bene..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="tempi">Entro quando ti servirebbe?</label>
+                            <textarea id="tempi" name="tempi" rows="2" placeholder="Es: entro fine mese, non c'è fretta, il prima possibile..."></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Ti serve supporto dopo la consegna?</label>
-                        <div class="checkbox-group">
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="supporto_bug" name="supporto" value="Solo per eventuali bug">
-                                <label for="supporto_bug">Solo per eventuali bug</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="supporto_modifiche" name="supporto" value="Anche per piccole modifiche">
-                                <label for="supporto_modifiche">Anche per piccole modifiche</label>
-                            </div>
-                            <div class="checkbox-item">
-                                <input type="checkbox" id="supporto_no" name="supporto" value="Non serve">
-                                <label for="supporto_no">Non serve</label>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 9: Domande Finali -->
+                <div class="step-container" data-step="9">
+                    <div class="step-header">
+                        <h2>❓ Domande Finali</h2>
+                        <p>Ultimi dettagli importanti</p>
+                    </div>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label>Il software deve essere facilmente modificabile in futuro?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="radio" id="modificabile_si" name="modificabile" value="Sì, prevedo spesso cambiamenti">
+                                    <label for="modificabile_si">Sì, prevedo spesso cambiamenti</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="modificabile_stabile" name="modificabile" value="Preferisco qualcosa di stabile">
+                                    <label for="modificabile_stabile">Preferisco qualcosa di stabile</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="radio" id="modificabile_non_so" name="modificabile" value="Non so">
+                                    <label for="modificabile_non_so">Non so</label>
+                                </div>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label>Ti serve supporto dopo la consegna?</label>
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="supporto_bug" name="supporto" value="Solo per eventuali bug">
+                                    <label for="supporto_bug">Solo per eventuali bug</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="supporto_modifiche" name="supporto" value="Anche per piccole modifiche">
+                                    <label for="supporto_modifiche">Anche per piccole modifiche</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="supporto_no" name="supporto" value="Non serve">
+                                    <label for="supporto_no">Non serve</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="altre_informazioni">Altre informazioni o richieste particolari:</label>
+                            <textarea id="altre_informazioni" name="altreInformazioni" rows="6" placeholder="Qualsiasi altra cosa che pensi possa essere utile sapere..."></textarea>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="altre_informazioni">Altre informazioni o richieste particolari:</label>
-                        <textarea id="altre_informazioni" name="altreInformazioni" rows="6"></textarea>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-next" onclick="nextStep()">
+                            Avanti <span>→</span>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Riepilogo -->
-                <div class="section">
-                    <h2>Riepilogo Veloce</h2>
-                    <div class="form-group">
-                        <label for="obiettivo">In una frase, cosa vuoi ottenere:</label>
-                        <textarea id="obiettivo" name="obiettivo" rows="4"></textarea>
+                <!-- Step 10: Riepilogo -->
+                <div class="step-container" data-step="10">
+                    <div class="step-header">
+                        <h2>📝 Riepilogo Veloce</h2>
+                        <p>Un riassunto finale per concludere</p>
                     </div>
-                    <div class="form-group">
-                        <label for="vantaggio">Il principale vantaggio che ti aspetti:</label>
-                        <textarea id="vantaggio" name="vantaggio" rows="4"></textarea>
+                    <div class="content-card">
+                        <div class="form-group">
+                            <label for="obiettivo">In una frase, cosa vuoi ottenere:</label>
+                            <textarea id="obiettivo" name="obiettivo" rows="4" placeholder="Il tuo obiettivo principale con questo software..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="vantaggio">Il principale vantaggio che ti aspetti:</label>
+                            <textarea id="vantaggio" name="vantaggio" rows="4" placeholder="Cosa cambierà in meglio quando avrai questo software..."></textarea>
+                        </div>
+                    </div>
+                    <div class="navigation-buttons">
+                        <button type="button" class="nav-button btn-prev" onclick="prevStep()">
+                            <span>←</span> Indietro
+                        </button>
+                        <button type="button" class="nav-button btn-save" onclick="saveQuestionnaire()">
+                            💾 Salva Questionario
+                        </button>
                     </div>
                 </div>
-
-                <button type="button" class="save-button" onclick="saveQuestionnaire()">
-                    💾 Salva Questionario
-                </button>
             </form>
         </div>
     </div>
@@ -660,6 +1077,71 @@
         // Imposta la data di oggi automaticamente
         document.getElementById('data').value = new Date().toISOString().split('T')[0];
 
+        let currentStep = 0;
+        const totalSteps = 11;
+
+        function updateProgress() {
+            const progress = ((currentStep) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `Step ${currentStep + 1} di ${totalSteps}`;
+        }
+
+        function updateStepNavigation() {
+            // Hide all steps
+            document.querySelectorAll('.step-container').forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Show current step
+            document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+            
+            // Update sidebar
+            document.querySelectorAll('.step-item').forEach((item, index) => {
+                item.classList.remove('active', 'completed');
+                if (index === currentStep) {
+                    item.classList.add('active');
+                } else if (index < currentStep) {
+                    item.classList.add('completed');
+                }
+            });
+            
+            updateProgress();
+        }
+
+        function nextStep() {
+            // Validate required fields for step 1
+            if (currentStep === 1) {
+                const cliente = document.getElementById('cliente').value;
+                if (!cliente || cliente.trim() === '') {
+                    alert('Per favore inserisci il nome del cliente prima di continuare.');
+                    return;
+                }
+            }
+            
+            if (currentStep < totalSteps - 1) {
+                currentStep++;
+                updateStepNavigation();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                updateStepNavigation();
+            }
+        }
+
+        // Sidebar navigation
+        document.querySelectorAll('.step-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+                // Allow navigation to completed steps or current step
+                if (index <= currentStep) {
+                    currentStep = index;
+                    updateStepNavigation();
+                }
+            });
+        });
+
         function saveQuestionnaire() {
             const form = document.getElementById('requirementsForm');
             const formData = new FormData(form);
@@ -668,6 +1150,8 @@
             const cliente = formData.get('cliente');
             if (!cliente || cliente.trim() === '') {
                 alert('Per favore inserisci il nome del cliente prima di salvare.');
+                currentStep = 1;
+                updateStepNavigation();
                 return;
             }
 
@@ -741,7 +1225,7 @@
                 y += 8;
                 
                 // Sfondo colorato per il titolo
-                doc.setFillColor(59, 130, 246);
+                doc.setFillColor(16, 185, 129);
                 doc.rect(marginLeft - 5, y - 6, maxWidth + 10, 10, 'F');
                 
                 doc.setTextColor(255, 255, 255);
@@ -862,7 +1346,7 @@
             }
             y += 15;
             
-            doc.setDrawColor(59, 130, 246);
+            doc.setDrawColor(16, 185, 129);
             doc.setLineWidth(1);
             doc.line(marginLeft, y, pageWidth - marginLeft, y);
             y += 10;
@@ -872,7 +1356,7 @@
             
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(10);
-            doc.setTextColor(59, 130, 246);
+            doc.setTextColor(16, 185, 129);
             doc.text(`Questionario compilato il: ${today}`, marginLeft, y + 5);
             
             y += 12;
@@ -886,6 +1370,9 @@
             
             alert(`✅ Questionario PDF salvato con successo!\n\nFile: ${filename}\n\n📧 Per favore invia il file scaricato via email per procedere con l'analisi dei requisiti.`);
         }
+
+        // Initialize
+        updateStepNavigation();
     </script>
 </body>
 </html>
