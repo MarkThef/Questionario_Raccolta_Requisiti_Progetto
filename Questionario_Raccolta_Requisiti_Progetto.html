@@ -1094,7 +1094,10 @@
             });
             
             // Show current step
-            document.querySelector(`[data-step="${currentStep}"]`).classList.add('active');
+            const currentStepElement = document.querySelector(`.step-container[data-step="${currentStep}"]`);
+            if (currentStepElement) {
+                currentStepElement.classList.add('active');
+            }
             
             // Update sidebar
             document.querySelectorAll('.step-item').forEach((item, index) => {
